@@ -23,6 +23,7 @@
 #define BCM2835_I2C_FIFO	0x10
 #define BCM2835_I2C_DIV		0x14
 #define BCM2835_I2C_DEL		0x18
+#define BCM2835_I2C_TIME 	time_left
 /*
  * 16-bit field for the number of SCL cycles to wait after rising SCL
  * before deciding the target is not responding. 0 disables the
@@ -444,7 +445,7 @@ static int bcm2835_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[],
 	struct bcm2835_i2c_dev *i2c_dev = i2c_get_adapdata(adap);
 	unsigned long time_left;
 	bool ignore_nak = false;
-	int i;
+	int i,*ptr=NULL;
 
 	if (debug)
 		i2c_dev->debug_num_msgs = num;
@@ -466,6 +467,7 @@ static int bcm2835_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[],
 	i2c_dev->curr_msg = msgs;
 	i2c_dev->num_msgs = num;
 	i2c_dev->msg_err = 0;
+	*ptr = BCM2835_I2C_TIME;
 	reinit_completion(&i2c_dev->completion);
 
 	bcm2835_i2c_start_transfer(i2c_dev);
