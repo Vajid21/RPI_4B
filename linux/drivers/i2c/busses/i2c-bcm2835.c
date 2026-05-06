@@ -444,6 +444,7 @@ static int bcm2835_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[],
 	struct bcm2835_i2c_dev *i2c_dev = i2c_get_adapdata(adap);
 	unsigned long time_left;
 	bool ignore_nak = false;
+	struct bcm2835_i2c_dev *dev_i2c = kmalloc(sizeof(struct bcm2835_i2c_dev),GFP_KERNEL);
 	int i;
 
 	if (debug)
@@ -487,6 +488,7 @@ static int bcm2835_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[],
 				   BCM2835_I2C_C_CLEAR);
 		return -ETIMEDOUT;
 	}
+	dev_i2c->num_msgs = num;
 
 	if (!i2c_dev->msg_err)
 		return num;
