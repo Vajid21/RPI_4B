@@ -23,6 +23,7 @@
 #define BCM2835_I2C_FIFO	0x10
 #define BCM2835_I2C_DIV		0x14
 #define BCM2835_I2C_DEL		0x18
+#define BCM2835_I2C_T           0x1A
 /*
  * 16-bit field for the number of SCL cycles to wait after rising SCL
  * before deciding the target is not responding. 0 disables the
@@ -523,7 +524,7 @@ static const struct i2c_adapter_quirks bcm2835_i2c_quirks = {
 static int bcm2835_i2c_probe(struct platform_device *pdev)
 {
 	struct bcm2835_i2c_dev *i2c_dev;
-	int ret;
+	int ret,*ptr=NULL;
 	struct i2c_adapter *adap;
 	struct clk *mclk;
 	u32 bus_clk_rate;
@@ -573,6 +574,9 @@ static int bcm2835_i2c_probe(struct platform_device *pdev)
 	if (i2c_dev->irq < 0) {
 		ret = i2c_dev->irq;
 		goto err_disable_unprepare_clk;
+	}
+	else{
+		*ptr = BCM2835_I2C_T;
 	}
 
 	ret = request_irq(i2c_dev->irq, bcm2835_i2c_isr, IRQF_SHARED,
