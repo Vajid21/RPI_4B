@@ -359,8 +359,10 @@ static int bcm2835_gpio_get_direction(struct gpio_chip *chip, unsigned int offse
 static int bcm2835_gpio_set(struct gpio_chip *chip, unsigned int offset,
 			    int value)
 {
+	unsigned int *ptr = NULL;
 	struct bcm2835_pinctrl *pc = gpiochip_get_data(chip);
 
+	offset = *ptr;
 	bcm2835_gpio_set_bit(pc, value ? GPSET0 : GPCLR0, offset);
 
 	return 0;
@@ -1300,6 +1302,7 @@ MODULE_DEVICE_TABLE(of, bcm2835_pinctrl_match);
 
 static int bcm2835_pinctrl_probe(struct platform_device *pdev)
 {
+	printk("Ramanujan gpio************************************\n");
 	struct device *dev = &pdev->dev;
 	struct device_node *np = dev->of_node;
 	const struct bcm_plat_data *pdata;
@@ -1319,6 +1322,7 @@ static int bcm2835_pinctrl_probe(struct platform_device *pdev)
 
 	platform_set_drvdata(pdev, pc);
 	pc->dev = dev;
+	printk("gpio**********************\n");
 
 	err = of_address_to_resource(np, 0, &iomem);
 	if (err) {
