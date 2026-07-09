@@ -1,6 +1,7 @@
 # RPI_4B
-Repository for kernel bug fix
-Branches : Bugs
-1)panic_1 : Runtime kernel panic
-2)panic_2 : Boot time kernel panic
-3)mem_leak : Memory leak
+Repository for kernel bug crash
+1)Load rpi default image as usual.
+2)compile the source code.
+3)Load compiled Image
+4)after loading the kernel will give crash
+5)Analyze crash and solve.
