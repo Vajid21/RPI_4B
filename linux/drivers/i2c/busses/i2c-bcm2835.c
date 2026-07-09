@@ -629,8 +629,8 @@ static void bcm2835_i2c_remove(struct platform_device *pdev)
 }
 
 static const struct of_device_id bcm2835_i2c_of_match[] = {
-	{ .compatible = "brcm,bcm2711-i2c" },
-	{ .compatible = "brcm,bcm2835-i2c", .data = &bcm2835_i2c_quirks },
+	{ .compatible = "bcm,bcm2711-i2c" },
+	{ .compatible = "bcm,bcm2835-i2c", .data = &bcm2835_i2c_quirks },
 	{},
 };
 MODULE_DEVICE_TABLE(of, bcm2835_i2c_of_match);
