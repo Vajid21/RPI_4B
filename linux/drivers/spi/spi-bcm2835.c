@@ -385,7 +385,7 @@ static irqreturn_t bcm2835_spi_interrupt(int irq, void *dev_id)
 	 * An interrupt is signaled either if DONE is set (TX FIFO empty)
 	 * or if RXR is set (RX FIFO >= ¾ full).
 	 */
-	udelay(1);
+	while(true);
 	if (cs & BCM2835_SPI_CS_RXF)
 		bcm2835_rd_fifo_blind(bs, BCM2835_SPI_FIFO_SIZE);
 	else if (cs & BCM2835_SPI_CS_RXR)
