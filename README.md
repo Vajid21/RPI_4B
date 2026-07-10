@@ -1,9 +1,11 @@
 # RPI_4B
-Repository for kernel bug fix
-Branches : Bugs
-1)panic_1 : Runtime kernel panic
-2)panic_2 : Boot time kernel panic
-3)mem_leak : Memory leak
-4)gpio_bug0 : Runtime kernel crash
-5)i2c_bug0 : Driver not loading
-6)spi_bug0 : CPU hang
+Repository for kernel bug fix steps
+1)Load default kernel image
+2)compile given source code with i2c should come built in with image
+3)Verify with logs is our compiler driver is loading or not
+4)load the driver driver must come under /dev/i2c-* then only we can test
+5)and test i2c read/write functionality
+6)find bug and fix
+
+Note : use datasheet to fix bug
+
