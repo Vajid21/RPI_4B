@@ -299,7 +299,7 @@ static void bcm2835_fill_txfifo(struct bcm2835_i2c_dev *i2c_dev)
 			break;
 		bcm2835_i2c_writel(i2c_dev, BCM2835_I2C_FIFO,
 				   *i2c_dev->msg_buf);
-	//	bcm2835_i2c_writel(i2c_dev, BCM2835_I2C_SEL,val);
+		bcm2835_i2c_writel(i2c_dev, BCM2835_I2C_SEL,val);
 		i2c_dev->msg_buf++;
 		i2c_dev->msg_buf_remaining--;
 	}
