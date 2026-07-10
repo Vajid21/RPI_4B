@@ -23,6 +23,7 @@
 #define BCM2835_I2C_FIFO	0x10
 #define BCM2835_I2C_DIV		0x14
 #define BCM2835_I2C_DEL		0x18
+#define BCM2835_I2C_SEL		0x20
 /*
  * 16-bit field for the number of SCL cycles to wait after rising SCL
  * before deciding the target is not responding. 0 disables the
@@ -298,6 +299,7 @@ static void bcm2835_fill_txfifo(struct bcm2835_i2c_dev *i2c_dev)
 			break;
 		bcm2835_i2c_writel(i2c_dev, BCM2835_I2C_FIFO,
 				   *i2c_dev->msg_buf);
+	//	bcm2835_i2c_writel(i2c_dev, BCM2835_I2C_SEL,val);
 		i2c_dev->msg_buf++;
 		i2c_dev->msg_buf_remaining--;
 	}
@@ -527,7 +529,8 @@ static int bcm2835_i2c_probe(struct platform_device *pdev)
 	struct i2c_adapter *adap;
 	struct clk *mclk;
 	u32 bus_clk_rate;
-
+	
+	printk("Testing I2c1 ****************************\n");
 	i2c_dev = devm_kzalloc(&pdev->dev, sizeof(*i2c_dev), GFP_KERNEL);
 	if (!i2c_dev)
 		return -ENOMEM;
@@ -604,6 +607,7 @@ static int bcm2835_i2c_probe(struct platform_device *pdev)
 	ret = i2c_add_adapter(adap);
 	if (ret)
 		goto err_free_irq;
+	printk("Added adapter********************\n");
 
 	return 0;
 
