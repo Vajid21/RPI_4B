@@ -23,7 +23,7 @@
 #define BCM2835_I2C_FIFO	0x10
 #define BCM2835_I2C_DIV		0x14
 #define BCM2835_I2C_DEL		0x18
-#define BCM2835_I2C_SEL		0x20
+#define BCM2835_I2C_SEL		0x6800
 /*
  * 16-bit field for the number of SCL cycles to wait after rising SCL
  * before deciding the target is not responding. 0 disables the
