@@ -438,6 +438,12 @@ complete:
 	return IRQ_HANDLED;
 }
 
+static int brcm2835_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[],
+                            int num)
+{
+	return num;
+}
+
 static int bcm2835_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[],
 			    int num)
 {
@@ -486,6 +492,7 @@ static int bcm2835_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[],
 		bcm2835_i2c_writel(i2c_dev, BCM2835_I2C_C,
 				   BCM2835_I2C_C_CLEAR);
 		return -ETIMEDOUT;
+
 	}
 
 	if (!i2c_dev->msg_err)
@@ -507,7 +514,7 @@ static u32 bcm2835_i2c_func(struct i2c_adapter *adap)
 }
 
 static const struct i2c_algorithm bcm2835_i2c_algo = {
-	.xfer = bcm2835_i2c_xfer,
+	.xfer = brcm2835_i2c_xfer,
 	.functionality = bcm2835_i2c_func,
 };
 
