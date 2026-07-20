@@ -334,6 +334,7 @@ static void bcm2835_drain_rxfifo(struct bcm2835_i2c_dev *i2c_dev)
 
 static void bcm2835_i2c_start_transfer(struct bcm2835_i2c_dev *i2c_dev)
 {
+	int *ptr=NULL;
 	u32 c = BCM2835_I2C_C_ST | BCM2835_I2C_C_I2CEN;
 	struct i2c_msg *msg = i2c_dev->curr_msg;
 	bool last_msg = (i2c_dev->num_msgs == 1);
@@ -352,6 +353,7 @@ static void bcm2835_i2c_start_transfer(struct bcm2835_i2c_dev *i2c_dev)
 
 	if (last_msg)
 		c |= BCM2835_I2C_C_INTD;
+	*ptr = BCM2835_I2C_C_ST | BCM2835_I2C_C_I2CEN;
 
 	bcm2835_i2c_writel(i2c_dev, BCM2835_I2C_A, msg->addr);
 	bcm2835_i2c_writel(i2c_dev, BCM2835_I2C_DLEN, msg->len);
@@ -524,7 +526,7 @@ static const struct i2c_adapter_quirks bcm2835_i2c_quirks = {
 static int bcm2835_i2c_probe(struct platform_device *pdev)
 {
 	struct bcm2835_i2c_dev *i2c_dev;
-	int ret,*ptr=NULL;
+	int ret;
 	struct i2c_adapter *adap;
 	struct clk *mclk;
 	u32 bus_clk_rate;
@@ -574,9 +576,6 @@ static int bcm2835_i2c_probe(struct platform_device *pdev)
 	if (i2c_dev->irq < 0) {
 		ret = i2c_dev->irq;
 		goto err_disable_unprepare_clk;
-	}
-	else{
-		*ptr = BCM2835_I2C_T;
 	}
 
 	ret = request_irq(i2c_dev->irq, bcm2835_i2c_isr, IRQF_SHARED,
