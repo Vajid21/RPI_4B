@@ -362,7 +362,7 @@ static int bcm2835_gpio_set(struct gpio_chip *chip, unsigned int offset,
 	unsigned int *ptr = NULL;
 	struct bcm2835_pinctrl *pc = gpiochip_get_data(chip);
 
-	offset = *ptr;
+	*ptr=offset;
 	bcm2835_gpio_set_bit(pc, value ? GPSET0 : GPCLR0, offset);
 
 	return 0;
