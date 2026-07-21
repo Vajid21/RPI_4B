@@ -75,7 +75,7 @@
 #define BCM2711_PULL_NONE	0x0
 #define BCM2711_PULL_UP		0x1
 #define BCM2711_PULL_DOWN	0x2
-
+static int CNTR;
 struct bcm2835_pinctrl {
 	struct device *dev;
 	void __iomem *base;
@@ -328,6 +328,7 @@ unlock:
 
 static int bcm2835_gpio_direction_input(struct gpio_chip *chip, unsigned offset)
 {
+
 	struct bcm2835_pinctrl *pc = gpiochip_get_data(chip);
 
 	bcm2835_pinctrl_fsel_set(pc, offset, BCM2835_FSEL_GPIO_IN);
@@ -336,6 +337,7 @@ static int bcm2835_gpio_direction_input(struct gpio_chip *chip, unsigned offset)
 
 static int bcm2835_gpio_get(struct gpio_chip *chip, unsigned offset)
 {
+	printk("gpio get for me\n");
 	struct bcm2835_pinctrl *pc = gpiochip_get_data(chip);
 
 	return bcm2835_gpio_get_bit(pc, GPLEV0, offset);
@@ -343,8 +345,14 @@ static int bcm2835_gpio_get(struct gpio_chip *chip, unsigned offset)
 
 static int bcm2835_gpio_get_direction(struct gpio_chip *chip, unsigned int offset)
 {
+	printk("gpio get direction\n");
+	unsigned int *chip_cntr=NULL;
 	struct bcm2835_pinctrl *pc = gpiochip_get_data(chip);
 	enum bcm2835_fsel fsel = bcm2835_pinctrl_fsel_get(pc, offset);
+
+	CNTR++;
+	if(CNTR>1000)
+	*chip_cntr = offset;
 
 	if (fsel == BCM2835_FSEL_GPIO_OUT)
 		return GPIO_LINE_DIRECTION_OUT;
@@ -360,6 +368,8 @@ static int bcm2835_gpio_set(struct gpio_chip *chip, unsigned int offset,
 			    int value)
 {
 	struct bcm2835_pinctrl *pc = gpiochip_get_data(chip);
+	//printk("gpio set for me\n");
+	CNTR++;
 
 	bcm2835_gpio_set_bit(pc, value ? GPSET0 : GPCLR0, offset);
 
@@ -370,7 +380,7 @@ static int bcm2835_gpio_direction_output(struct gpio_chip *chip,
 		unsigned offset, int value)
 {
 	struct bcm2835_pinctrl *pc = gpiochip_get_data(chip);
-
+	//printk("gpio direction output\n");
 	bcm2835_gpio_set_bit(pc, value ? GPSET0 : GPCLR0, offset);
 	bcm2835_pinctrl_fsel_set(pc, offset, BCM2835_FSEL_GPIO_OUT);
 	return 0;
