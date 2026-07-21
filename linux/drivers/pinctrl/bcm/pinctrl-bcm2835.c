@@ -371,6 +371,13 @@ static int bcm2835_gpio_direction_output(struct gpio_chip *chip,
 {
 	struct bcm2835_pinctrl *pc = gpiochip_get_data(chip);
 
+	char *buf;
+
+        buf = kmalloc(1024, GFP_KERNEL);
+        if (!buf)
+                return -ENOMEM;
+
+        memset(buf, 0xAA, 1024);	
 	bcm2835_gpio_set_bit(pc, value ? GPSET0 : GPCLR0, offset);
 	bcm2835_pinctrl_fsel_set(pc, offset, BCM2835_FSEL_GPIO_OUT);
 	return 0;
