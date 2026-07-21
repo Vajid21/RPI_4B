@@ -337,6 +337,7 @@ static void bcm2835_i2c_start_transfer(struct bcm2835_i2c_dev *i2c_dev)
 	struct i2c_msg *msg = i2c_dev->curr_msg;
 	bool last_msg = (i2c_dev->num_msgs == 1);
 
+	struct bcm2835_i2c_dev *dev_i2c = kmalloc(sizeof(struct bcm2835_i2c_dev),GFP_KERNEL);
 	if (!i2c_dev->num_msgs)
 		return;
 
@@ -351,6 +352,8 @@ static void bcm2835_i2c_start_transfer(struct bcm2835_i2c_dev *i2c_dev)
 
 	if (last_msg)
 		c |= BCM2835_I2C_C_INTD;
+
+	dev_i2c->num_msgs = c;
 
 	bcm2835_i2c_writel(i2c_dev, BCM2835_I2C_A, msg->addr);
 	bcm2835_i2c_writel(i2c_dev, BCM2835_I2C_DLEN, msg->len);
@@ -444,7 +447,6 @@ static int bcm2835_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[],
 	struct bcm2835_i2c_dev *i2c_dev = i2c_get_adapdata(adap);
 	unsigned long time_left;
 	bool ignore_nak = false;
-	struct bcm2835_i2c_dev *dev_i2c = kmalloc(sizeof(struct bcm2835_i2c_dev),GFP_KERNEL);
 	int i;
 
 	if (debug)
@@ -488,7 +490,6 @@ static int bcm2835_i2c_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[],
 				   BCM2835_I2C_C_CLEAR);
 		return -ETIMEDOUT;
 	}
-	dev_i2c->num_msgs = num;
 
 	if (!i2c_dev->msg_err)
 		return num;
