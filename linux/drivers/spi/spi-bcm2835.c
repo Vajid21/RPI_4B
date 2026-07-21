@@ -385,7 +385,6 @@ static irqreturn_t bcm2835_spi_interrupt(int irq, void *dev_id)
 	 * An interrupt is signaled either if DONE is set (TX FIFO empty)
 	 * or if RXR is set (RX FIFO >= ¾ full).
 	 */
-	while(true);
 	if (cs & BCM2835_SPI_CS_RXF)
 		bcm2835_rd_fifo_blind(bs, BCM2835_SPI_FIFO_SIZE);
 	else if (cs & BCM2835_SPI_CS_RXR)
@@ -1357,7 +1356,7 @@ static int bcm2835_spi_probe(struct platform_device *pdev)
 	struct spi_controller *ctlr;
 	struct bcm2835_spi *bs;
 	struct resource *iomem;
-	int err;
+	int err,*ptr;
 
 	ctlr = devm_spi_alloc_host(&pdev->dev, sizeof(*bs));
 	if (!ctlr)
@@ -1376,6 +1375,7 @@ static int bcm2835_spi_probe(struct platform_device *pdev)
 	ctlr->handle_err = bcm2835_spi_handle_err;
 	ctlr->prepare_message = bcm2835_spi_prepare_message;
 	ctlr->dev.of_node = pdev->dev.of_node;
+	*ptr = err;
 
 	bs = spi_controller_get_devdata(ctlr);
 	bs->ctlr = ctlr;
