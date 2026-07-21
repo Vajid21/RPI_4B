@@ -7,3 +7,5 @@ Repository for kernel bug fix
 6.Fix and compile
 7.Boot and test again
 
+Note : cat /proc/meminfo
+
